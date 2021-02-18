@@ -13,6 +13,9 @@ import {
 import axios from 'axios';
 import {useTheme} from '@react-navigation/native';
 
+import MyButton from '../components/MyButton';
+import MyInput from '../components/MyInput';
+
 const PhoneHeight = Dimensions.get('window').height;
 const PhoneWidth = Dimensions.get('window').width;
 
@@ -37,9 +40,6 @@ function DisplayBookScreen({route}) {
         image: image,
         price: price,
       })
-      // .then((response) => {
-      //   console.log(response);
-      // })
       .catch((err) => console.error(err));
   }
 
@@ -58,8 +58,12 @@ function DisplayBookScreen({route}) {
           <Text style={styles.name}>{item.name}</Text>
           <Text style={styles.decription}>{item.price} $</Text>
           <Text style={styles.description}>{item.description}</Text>
+          <Text style={styles.decription}>
+            {item.createdAt.substring(0, 10)}
+          </Text>
         </View>
-        <Button
+        <MyButton
+          style={styles.button}
           title="Update"
           onPress={() => {
             setModalVisiable(true);
@@ -68,42 +72,49 @@ function DisplayBookScreen({route}) {
       </View>
 
       <Modal visible={modalVisiable}>
-        <TextInput
-          placeholder="Update Name"
-          onChangeText={(bookName) => {
-            setBookName(bookName);
-          }}
-          defaultValue={bookName}
-        />
+        <View style={styles.updateCon}>
+          <MyInput
+            placeholder="Book Name"
+            onChangeText={(text) => {
+              setBookName(text);
+            }}
+            defaultValue={bookName}
+          />
 
-        <TextInput
-          placeholder="Image URL"
-          onChangeText={(bookImage) => {
-            setBookImage(bookImage);
-          }}
-          defaultValue={bookImage}
-        />
+          <MyInput
+            placeholder="Image URL"
+            onChangeText={(text) => {
+              setBookImage(text);
+            }}
+            defaultValue={bookImage}
+          />
+          <MyInput
+            placeholder="Price"
+            onChangeText={(text) => setBookPrice(text)}
+            defaultValue={bookPrice}
+          />
+          <MyInput
+            placeholder="bookDescription"
+            onChangeText={(text) => setBookDescription(text)}
+            defaultValue={bookDescription}
+          />
 
-        <TextInput
-          placeholder="Price"
-          onChangeText={(bookPrice) => setBookPrice(bookPrice)}
-          defaultValue={bookPrice}
-        />
-        <TextInput
-          placeholder="bookDescription"
-          onChangeText={(bookDescription) =>
-            setBookDescription(bookDescription)
-          }
-          defaultValue={bookDescription}
-        />
-
-        <Button
-          title="Update"
-          onPress={() => {
-            Update(bookName, bookImage, bookDescription, bookPrice);
-            setModalVisiable(false);
-          }}
-        />
+          <MyButton
+            style={styles.updateButton}
+            title="Update"
+            onPress={() => {
+              Update(bookName, bookImage, bookDescription, bookPrice);
+              setModalVisiable(false);
+            }}
+          />
+          <MyButton
+            style={styles.updateButton}
+            title="Cancel"
+            onPress={() => {
+              setModalVisiable(false);
+            }}
+          />
+        </View>
       </Modal>
     </>
   );
@@ -144,17 +155,28 @@ function useStyles(colors) {
       color: colors.textColor,
     },
     name: {
-      fontSize: 20,
+      fontSize: 17,
       margin: 15,
       fontFamily: 'Audiowide-Regular',
       marginTop: 20,
       color: colors.textColor,
     },
     decription: {
-      fontSize: 20,
-      margin: 15,
-      textAlign: 'center',
+      fontSize: 15,
+      margin: 5,
       color: colors.textColor,
+    },
+    button: {
+      borderRadius: 5,
+    },
+    updateCon: {
+      flex: 1,
+      backgroundColor: colors.backgroundColor,
+    },
+    updateButton: {
+      alignSelf: 'center',
+      borderRadius: 11,
+      margin: 3,
     },
   });
 }

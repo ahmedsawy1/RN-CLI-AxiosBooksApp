@@ -1,17 +1,8 @@
 import React from 'react';
-
-import {
-  StyleSheet,
-  View,
-  Button,
-  Text,
-  Image,
-  TouchableOpacity,
-  Dimensions,
-} from 'react-native';
-import MyButton from './MyButton';
-
+import {StyleSheet, View, Text, Image, Dimensions} from 'react-native';
 import {useTheme} from '@react-navigation/native';
+
+import MyButton from './MyButton';
 
 const phoneHeight = Dimensions.get('window').height;
 const phoneWidth = Dimensions.get('window').width;
@@ -24,15 +15,10 @@ function BookItem({name, image, price, createdAt, onPress, onPressDel}) {
     <View style={styles.con}>
       <Image source={image ? {uri: image} : null} style={styles.image} />
       <View style={styles.detailsCon}>
-        <Text style={{color: colors.textColor}}>{name}</Text>
-        <Text style={{color: colors.textColor}}>{price} $</Text>
-        <Text style={{color: colors.textColor}}>
-          {createdAt.substring(0, 9)}
-        </Text>
-        {/* <Text>Time:{createdAt.substring(11, 16)}</Text> */}
+        <Text style={styles.text}>{name}</Text>
+        <Text style={styles.text}>{price} $</Text>
+        <Text style={styles.text}>{createdAt.substring(0, 10)}</Text>
         <View style={{flexDirection: 'row'}}>
-          {/* <Button color="blue" title="Delete" onPress={onPressDelete} /> */}
-          {/* <Button color="blue" title="show" onPress={onPressDelete} /> */}
           <MyButton title="Delete" onPress={onPressDel} />
           <MyButton title="Details" onPress={onPress} />
         </View>
@@ -57,6 +43,9 @@ function useStyles(colors) {
     detailsCon: {
       justifyContent: 'center',
       alignItems: 'center',
+    },
+    text: {
+      color: colors.textColor,
     },
   });
 }

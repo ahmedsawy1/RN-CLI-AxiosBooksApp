@@ -5,9 +5,10 @@ import {
   DarkTheme,
   DefaultTheme,
 } from '@react-navigation/native';
+import {EventRegister} from 'react-native-event-listeners';
+
 import MainScreen from '../screens/MainScreen';
 import DisplayBookScreen from '../screens/DisplayBookScreen';
-import {EventRegister} from 'react-native-event-listeners';
 
 const customDarkTheme = {
   ...DarkTheme,
@@ -29,7 +30,7 @@ const customDefaultTheme = {
     backgroundColor: 'white',
     textColor: 'black',
     cardColor: 'dodgerblue',
-    buttonColor: 'blue',
+    buttonColor: '#2CCCE4',
   },
 };
 
@@ -37,7 +38,7 @@ const Stack = createStackNavigator();
 
 function MainStack() {
   useEffect(() => {
-    let listener = EventRegister.addEventListener('ChangeTheme', (data) => {
+    EventRegister.addEventListener('ChangeTheme', (data) => {
       setIsDark(data);
     });
     return () => {
@@ -51,7 +52,7 @@ function MainStack() {
 
   return (
     <NavigationContainer theme={Theme}>
-      <Stack.Navigator>
+      <Stack.Navigator screenOptions={{headerShown: false}}>
         <Stack.Screen name="MainScreen" component={MainScreen} />
         <Stack.Screen name="DisplayBookScreen" component={DisplayBookScreen} />
       </Stack.Navigator>

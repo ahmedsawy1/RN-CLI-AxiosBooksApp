@@ -9,6 +9,7 @@ import {
   Modal,
   Text,
   Switch,
+  ActivityIndicator,
 } from 'react-native';
 import axios from 'axios';
 import {EventRegister} from 'react-native-event-listeners';
@@ -16,6 +17,7 @@ import {useTheme} from '@react-navigation/native';
 
 import BookItem from '../components/BookItem';
 import MyButton from '../components/MyButton';
+import MyInput from '../components/MyInput';
 
 function MainScreen({navigation}) {
   const [dark, setdark] = useState(false);
@@ -123,43 +125,56 @@ function MainScreen({navigation}) {
         </View>
       </View>
       <Modal visible={visible}>
-        <TextInput
-          placeholder="Book Name"
-          onChangeText={(bookName) => {
-            setBookName(bookName);
-          }}
-          defaultValue={bookName}
-        />
-        <TextInput
-          placeholder="Book Image URL"
-          onChangeText={(bookImage) => {
-            setBookImage(bookImage);
-          }}
-          defaultValue={bookImage}
-        />
-        <TextInput
-          placeholder="Book Price"
-          onChangeText={(bookPrice) => {
-            setBookPrice(bookPrice);
-          }}
-          defaultValue={bookPrice}
-        />
-        <TextInput
-          placeholder="Book Description"
-          onChangeText={(bookDescription) => {
-            setBookDescription(bookDescription);
-          }}
-          defaultValue={bookDescription}
-        />
+        <View style={styles.addScreen}>
+          <MyInput
+            placeholder="Book Name"
+            onChangeText={(text) => {
+              setBookName(text);
+            }}
+            defaultValue={bookName}
+          />
 
-        <Button
-          title="Add Book"
-          onPress={() => {
-            Post(bookName, bookImage, bookDescription, bookPrice);
-            setVisible(false);
-            Get();
-          }}
-        />
+          <MyInput
+            placeholder="Book Image URL"
+            onChangeText={(text) => {
+              setBookImage(text);
+            }}
+            defaultValue={bookImage}
+          />
+
+          <MyInput
+            placeholder="Book Price"
+            onChangeText={(text) => {
+              setBookPrice(text);
+            }}
+            defaultValue={bookPrice}
+          />
+
+          <MyInput
+            placeholder="Book Description"
+            onChangeText={(text) => {
+              setBookDescription(text);
+            }}
+            defaultValue={bookDescription}
+          />
+
+          <MyButton
+            style={styles.modalButtons}
+            title="Add Book"
+            onPress={() => {
+              Post(bookName, bookImage, bookDescription, bookPrice);
+              setVisible(false);
+              Get();
+            }}
+          />
+          <MyButton
+            style={styles.modalButtons}
+            title="Cancel"
+            onPress={() => {
+              setVisible(false);
+            }}
+          />
+        </View>
       </Modal>
 
       <Modal visible={settingsVisible}>
@@ -214,6 +229,15 @@ function useStyles(colors) {
       color: colors.textColor,
       margin: 10,
       fontSize: 19,
+    },
+    addScreen: {
+      backgroundColor: colors.backgroundColor,
+      flex: 1,
+    },
+    modalButtons: {
+      alignSelf: 'center',
+      borderRadius: 11,
+      margin: 3,
     },
   });
 }
