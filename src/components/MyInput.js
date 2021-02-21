@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet, View, TextInput} from 'react-native';
 import {useTheme} from '@react-navigation/native';
 
-function MyInput({placeholder, defaultValue, ...props}) {
+function MyInput({placeholder, value, ...props}) {
   const {colors} = useTheme();
   const styles = useStyles(colors);
 
@@ -12,7 +12,7 @@ function MyInput({placeholder, defaultValue, ...props}) {
         placeholderTextColor={colors.textColor}
         {...props}
         placeholder={placeholder}
-        defaultValue={defaultValue}
+        value={value}
         style={styles.inputText}
       />
     </View>
