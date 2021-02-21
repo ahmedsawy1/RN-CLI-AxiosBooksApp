@@ -1,14 +1,5 @@
 import React, {useState} from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  Image,
-  Button,
-  TextInput,
-  Modal,
-  Dimensions,
-} from 'react-native';
+import {StyleSheet, View, Text, Image, Modal, Dimensions} from 'react-native';
 
 import axios from 'axios';
 import {useTheme} from '@react-navigation/native';

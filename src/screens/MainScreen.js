@@ -2,14 +2,12 @@ import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   View,
-  Button,
-  TextInput,
   FlatList,
   Alert,
   Modal,
   Text,
   Switch,
-  ActivityIndicator,
+  TextInput,
 } from 'react-native';
 import axios from 'axios';
 import {EventRegister} from 'react-native-event-listeners';
@@ -27,11 +25,12 @@ function MainScreen({navigation}) {
   const [data, setData] = useState([]);
   const [bookName, setBookName] = useState('');
   const [bookImage, setBookImage] = useState('');
-  const [bookPrice, setBookPrice] = useState();
+  const [bookPrice, setBookPrice] = useState('');
   const [bookDescription, setBookDescription] = useState('');
   const [loading, setLoading] = useState(true);
   const [visible, setVisible] = useState(false);
   const [settingsVisible, setSettingsVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     Get();
@@ -50,16 +49,28 @@ function MainScreen({navigation}) {
   }
 
   function Post(name, image, description, price) {
-    axios
-      .post('https://602ba57eef26b40017f14804.mockapi.io/books/list', {
-        name: name,
-        description: description,
-        image: image,
-        price: price,
-      })
+    if (name.length < 5) {
+      setErrorMessage('Enter A name');
+    } else if (image.length < 5) {
+      setErrorMessage('Enter A Image');
+    } else if (price.length < 5) {
+      setErrorMessage('Enter A Price');
+    } else if (description.length < 5) {
+      setErrorMessage('Enter A Description');
+    } else {
+      axios
+        .post('https://602ba57eef26b40017f14804.mockapi.io/books/list', {
+          name: name,
+          description: description,
+          image: image,
+          price: price,
+        })
 
-      .catch((err) => console.error(err));
+        .catch((err) => console.error(err))
+        .finally(() => setVisible(false));
+    }
   }
+
   function Delete(id) {
     axios
       .delete(`https://602ba57eef26b40017f14804.mockapi.io/books/list/${id}`)
@@ -130,8 +141,9 @@ function MainScreen({navigation}) {
             placeholder="Book Name"
             onChangeText={(text) => {
               setBookName(text);
+              setErrorMessage('');
             }}
-            defaultValue={bookName}
+            value={bookName}
           />
 
           <MyInput
@@ -139,7 +151,7 @@ function MainScreen({navigation}) {
             onChangeText={(text) => {
               setBookImage(text);
             }}
-            defaultValue={bookImage}
+            value={bookImage}
           />
 
           <MyInput
@@ -147,7 +159,8 @@ function MainScreen({navigation}) {
             onChangeText={(text) => {
               setBookPrice(text);
             }}
-            defaultValue={bookPrice}
+            value={bookPrice}
+            keyboardType="numeric"
           />
 
           <MyInput
@@ -155,15 +168,16 @@ function MainScreen({navigation}) {
             onChangeText={(text) => {
               setBookDescription(text);
             }}
-            defaultValue={bookDescription}
+            value={bookDescription}
           />
+          <Text style={styles.errorMessage}>{errorMessage}</Text>
 
           <MyButton
             style={styles.modalButtons}
             title="Add Book"
             onPress={() => {
               Post(bookName, bookImage, bookDescription, bookPrice);
-              setVisible(false);
+              // setVisible(false);
               Get();
             }}
           />
@@ -238,6 +252,10 @@ function useStyles(colors) {
       alignSelf: 'center',
       borderRadius: 11,
       margin: 3,
+    },
+    errorMessage: {
+      color: 'red',
+      alignSelf: 'center',
     },
   });
 }
