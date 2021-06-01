@@ -49,9 +49,6 @@ function DisplayBookScreen({route}) {
           <Text style={styles.name}>{item.name}</Text>
           <Text style={styles.decription}>{item.price} $</Text>
           <Text style={styles.description}>{item.description}</Text>
-          <Text style={styles.decription}>
-            {item.createdAt.substring(0, 10)}
-          </Text>
         </View>
         <MyButton
           style={styles.button}

@@ -7,7 +7,6 @@ import {
   Modal,
   Text,
   Switch,
-  TextInput,
 } from 'react-native';
 import axios from 'axios';
 import {EventRegister} from 'react-native-event-listeners';
@@ -16,6 +15,7 @@ import {useTheme} from '@react-navigation/native';
 import BookItem from '../components/BookItem';
 import MyButton from '../components/MyButton';
 import MyInput from '../components/MyInput';
+import baseURL from '../server/baseURL';
 
 function MainScreen({navigation}) {
   const [dark, setdark] = useState(false);
@@ -38,7 +38,7 @@ function MainScreen({navigation}) {
 
   function Get() {
     axios
-      .get('https://602ba57eef26b40017f14804.mockapi.io/books/list')
+      .get(`${baseURL}books`)
       .then(async function (response) {
         setLoading(true);
         setData(response.data);
@@ -89,14 +89,13 @@ function MainScreen({navigation}) {
             onRefresh={() => Get()}
             refreshing={loading}
             data={data}
-            keyExtractor={(item) => item.id.toString()}
+            keyExtractor={(item) => item._id.toString()}
             renderItem={({item}) => (
               <BookItem
                 name={item.name}
-                description={item.description}
+                // description={item.description}
                 image={item.image}
                 price={item.price}
-                createdAt={item.createdAt}
                 onPressDel={() =>
                   Alert.alert(
                     'Delete',

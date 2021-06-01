@@ -7,7 +7,7 @@ import MyButton from './MyButton';
 const phoneHeight = Dimensions.get('window').height;
 const phoneWidth = Dimensions.get('window').width;
 
-function BookItem({name, image, price, createdAt, onPress, onPressDel}) {
+function BookItem({name, image, price, onPress, onPressDel}) {
   const {colors} = useTheme();
   const styles = useStyles(colors);
 
@@ -17,7 +17,6 @@ function BookItem({name, image, price, createdAt, onPress, onPressDel}) {
       <View style={styles.detailsCon}>
         <Text style={styles.text}>{name}</Text>
         <Text style={styles.text}>{price} $</Text>
-        <Text style={styles.text}>{createdAt.substring(0, 10)}</Text>
         <View style={{flexDirection: 'row'}}>
           <MyButton title="Delete" onPress={onPressDel} />
           <MyButton title="Details" onPress={onPress} />
