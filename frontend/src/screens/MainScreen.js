@@ -25,7 +25,7 @@ function MainScreen({navigation}) {
   const [data, setData] = useState([]);
   const [bookName, setBookName] = useState('');
   const [bookImage, setBookImage] = useState('');
-  const [bookPrice, setBookPrice] = useState('');
+  const [bookPrice, setBookPrice] = useState();
   const [bookDescription, setBookDescription] = useState('');
   const [loading, setLoading] = useState(true);
   const [visible, setVisible] = useState(false);
@@ -53,13 +53,13 @@ function MainScreen({navigation}) {
       setErrorMessage('Enter A name');
     } else if (image.length < 5) {
       setErrorMessage('Enter A Image');
-    } else if (price.length < 5) {
+    } else if (price === 0) {
       setErrorMessage('Enter A Price');
     } else if (description.length < 5) {
       setErrorMessage('Enter A Description');
     } else {
       axios
-        .post('https://602ba57eef26b40017f14804.mockapi.io/books/list', {
+        .post(`${baseURL}books`, {
           name: name,
           description: description,
           image: image,
@@ -71,10 +71,12 @@ function MainScreen({navigation}) {
     }
   }
 
-  function Delete(id) {
+  function Delete(_id) {
     axios
-      .delete(`https://602ba57eef26b40017f14804.mockapi.io/books/list/${id}`)
-      .then((response) => {})
+      .delete(`${baseURL}books/${_id}`)
+      .then((response) => {
+        console.log(response);
+      })
       .catch((err) => console.error(err));
   }
 
@@ -108,7 +110,7 @@ function MainScreen({navigation}) {
                       {
                         text: 'OK',
                         onPress: () => {
-                          Delete(item.id);
+                          Delete(item._id);
                           Get();
                         },
                       },

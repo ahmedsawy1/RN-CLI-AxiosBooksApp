@@ -6,6 +6,7 @@ import {useTheme} from '@react-navigation/native';
 
 import MyButton from '../components/MyButton';
 import MyInput from '../components/MyInput';
+import baseURL from '../server/baseURL';
 
 const PhoneHeight = Dimensions.get('window').height;
 const PhoneWidth = Dimensions.get('window').width;
@@ -15,7 +16,7 @@ function DisplayBookScreen({route}) {
   const styles = useStyles(colors);
 
   const item = route.params;
-  const id = item.id;
+  const _id = item._id;
 
   const [bookName, setBookName] = useState('');
   const [bookImage, setBookImage] = useState('');
@@ -25,7 +26,7 @@ function DisplayBookScreen({route}) {
 
   function Update(name, image, description, price) {
     axios
-      .put(`https://602ba57eef26b40017f14804.mockapi.io/books/list/${id}`, {
+      .put(`${baseURL}books/${_id}`, {
         name: name,
         description: description,
         image: image,
