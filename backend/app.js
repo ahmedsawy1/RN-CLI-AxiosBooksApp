@@ -6,7 +6,9 @@ const booksRouter = require("./routes/books");
 
 app.use(express.json());
 app.use("/books", booksRouter);
-
+app.get("/", (req, res) => {
+  res.send("Hello");
+});
 mongoose
   .connect(
     "mongodb+srv://ahmed:a123456789@cluster0.f0bzw.mongodb.net/axiosBooksApp?retryWrites=true&w=majority",
@@ -19,4 +21,6 @@ mongoose
   .then(console.log("Connected"))
   .catch((err) => console.log(err));
 
-app.listen("3000", console.log("listned"));
+let port = process.env.PORT || 3000;
+
+app.listen(port);

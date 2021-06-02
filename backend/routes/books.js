@@ -7,6 +7,7 @@ router.post("/", async (req, res) => {
     name: req.body.name,
     price: req.body.price,
     image: req.body.image,
+    description: req.body.description,
   });
   newBook = await newBook.save();
 
@@ -42,6 +43,7 @@ router.put("/:id", async (req, res) => {
       name: req.body.name,
       price: req.body.price,
       image: req.body.image,
+      description: req.body.description,
     },
     { new: true }
   );
