@@ -1,13 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import {
-  StyleSheet,
-  View,
-  FlatList,
-  Alert,
-  Modal,
-  Text,
-  Switch,
-} from 'react-native';
+import {StyleSheet, View, FlatList} from 'react-native';
+import {Alert, Modal, Text, Switch, Button} from 'react-native';
+
 import axios from 'axios';
 import {EventRegister} from 'react-native-event-listeners';
 import {useTheme} from '@react-navigation/native';
@@ -16,58 +10,43 @@ import BookItem from '../components/BookItem';
 import MyButton from '../components/MyButton';
 import MyInput from '../components/MyInput';
 import baseURL from '../server/baseURL';
+import {useSelector, useDispatch} from 'react-redux';
+import {addBook, getBooks} from '../redux/booksActions';
 
 function MainScreen({navigation}) {
+  const dispatch = useDispatch();
+  const data = useSelector((state) => state.data);
+  const loading = useSelector((state) => state.loading);
+
   const [dark, setdark] = useState(false);
   const {colors} = useTheme();
   const styles = useStyles(colors);
 
-  const [data, setData] = useState([]);
   const [bookName, setBookName] = useState('');
   const [bookImage, setBookImage] = useState('');
   const [bookPrice, setBookPrice] = useState();
   const [bookDescription, setBookDescription] = useState('');
-  const [loading, setLoading] = useState(true);
   const [visible, setVisible] = useState(false);
   const [settingsVisible, setSettingsVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    Get();
+    dispatch(getBooks());
   }, []);
 
-  function Get() {
-    axios
-      .get(`${baseURL}books`)
-      .then(async function (response) {
-        setLoading(true);
-        setData(response.data);
-        setLoading(false);
-      })
-
-      .catch((err) => console.error(err));
-  }
-
-  function Post(name, image, description, price) {
+  function addNewBook(name, description, price, image) {
     if (name.length < 5) {
       setErrorMessage('Enter A name');
     } else if (image.length < 5) {
       setErrorMessage('Enter A Image');
-    } else if (price === 0) {
+    } else if (price.length === 0) {
       setErrorMessage('Enter A Price');
     } else if (description.length < 5) {
       setErrorMessage('Enter A Description');
     } else {
-      axios
-        .post(`${baseURL}books`, {
-          name: name,
-          description: description,
-          image: image,
-          price: price,
-        })
-
-        .catch((err) => console.error(err))
-        .finally(() => setVisible(false));
+      dispatch(addBook(bookName, bookDescription, bookPrice, bookImage));
+      setVisible(false);
+      dispatch(getBooks());
     }
   }
 
@@ -151,6 +130,7 @@ function MainScreen({navigation}) {
             placeholder="Book Image URL"
             onChangeText={(text) => {
               setBookImage(text);
+              setErrorMessage('');
             }}
             value={bookImage}
           />
@@ -159,6 +139,7 @@ function MainScreen({navigation}) {
             placeholder="Book Price"
             onChangeText={(text) => {
               setBookPrice(text);
+              setErrorMessage('');
             }}
             value={bookPrice}
             keyboardType="numeric"
@@ -177,9 +158,7 @@ function MainScreen({navigation}) {
             style={styles.modalButtons}
             title="Add Book"
             onPress={() => {
-              Post(bookName, bookImage, bookDescription, bookPrice);
-              // setVisible(false);
-              Get();
+              addNewBook(bookName, bookDescription, bookPrice, bookImage);
             }}
           />
           <MyButton
