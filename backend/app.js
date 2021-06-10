@@ -2,9 +2,9 @@ const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
 
-const booksRouter = require("./routes/books");
-
 app.use(express.json());
+
+const booksRouter = require("./routes/books");
 app.use("/books", booksRouter);
 app.get("/", (req, res) => {
   res.send("Hello");
@@ -21,6 +21,10 @@ mongoose
   .then(console.log("Connected"))
   .catch((err) => console.log(err));
 
-let port = process.env.PORT || 3000;
+// let port = process.env.PORT || 3000;
+// app.listen(port);
 
-app.listen(port);
+var server = app.listen(process.env.PORT || 3000, function () {
+  var port = server.address().port;
+  console.log("Express is working on prot" + port);
+});
